@@ -1,2 +1,8 @@
-package finalcountdown.homerecipesystembackend.controller;public class RecipeController {
+package finalcountdown.homerecipesystembackend.controller;
+
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class RecipeController {
+
 }
