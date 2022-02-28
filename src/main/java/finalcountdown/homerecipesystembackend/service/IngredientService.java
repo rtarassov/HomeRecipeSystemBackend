@@ -4,6 +4,7 @@ import finalcountdown.homerecipesystembackend.model.Ingredient;
 import finalcountdown.homerecipesystembackend.model.IngredientType;
 import finalcountdown.homerecipesystembackend.repository.IngredientRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
