@@ -30,13 +30,15 @@ public class IngredientService {
         ingredientRepository.save(entity);
     }
 
-    public void updateIngredient(Long id, Ingredient entity) {
+    public boolean updateIngredient(Long id, Ingredient entity) {
         log.info("updating ingredient", entity);
         Optional<Ingredient> ingredient = ingredientRepository.findById(id);
         if (ingredient.isPresent()) {
             entity.setId(ingredient.get().getId());
             ingredientRepository.save(entity);
+            return true;
         }
+        return false;
     }
 
     public List<Ingredient> readAllIngredients() {
