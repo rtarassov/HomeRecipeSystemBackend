@@ -26,7 +26,7 @@ public class IngredientController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createIngredient(@RequestBody Ingredient newIngredient) {
-        log.info("New ingredient to save", newIngredient);
+        log.info("New ingredient to save: [{}]", newIngredient);
         ingredientService.saveIngredient(newIngredient);
         return ResponseEntity.created(URI.create("/ingredient/create/%d"
                         .formatted(newIngredient.getId())))
@@ -47,7 +47,7 @@ public class IngredientController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // localhost:8080/delete-by-id/1
+    // localhost:8080/ingredient/delete-by-id/1
     @DeleteMapping("/delete-by-id/{id}")
     public ResponseEntity<Void> deleteIngredientById(@PathVariable("id") Long id) {
         log.info("trying to delete ingredient by id: [{}]", id);
@@ -59,7 +59,8 @@ public class IngredientController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Ingredient> updateIngredientById(@PathVariable("id") Long id, @RequestBody Ingredient ingredient) {
+    public ResponseEntity<Ingredient> updateIngredientById(@PathVariable("id") Long id,
+                                                           @RequestBody Ingredient ingredient) {
         log.info("updateIngredientById() called from controller");
         ingredientService.updateIngredient(id, ingredient);
         return ResponseEntity.created(URI.create("/ingredient/create/%d"

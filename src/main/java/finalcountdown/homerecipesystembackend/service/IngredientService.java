@@ -26,12 +26,13 @@ public class IngredientService {
 
     // @Transactional
     public void saveIngredient(Ingredient entity) {
-        log.info("entity for saving", entity);
+        log.info("entity for saving: [{}]", entity);
         ingredientRepository.save(entity);
     }
 
+    @Transactional
     public void updateIngredient(Long id, Ingredient entity) {
-        log.info("updating ingredient", entity);
+        log.info("updating ingredient: [{}]", entity);
         Optional<Ingredient> ingredient = ingredientRepository.findById(id);
         if (ingredient.isPresent()) {
             entity.setId(ingredient.get().getId());
@@ -43,14 +44,14 @@ public class IngredientService {
         log.info("Trying to read all ingredients in database");
 
         var result = ingredientRepository.findAll();
-        log.info("Ingredients saved from DB: " + result);
+        log.info("Ingredients found from DB: [{}]", result);
         return result;
     }
 
 
     @Transactional
     public boolean deleteIngredientById(Long id) {
-        log.info("Trying to delete entity by id: [{}]", id);
+        log.info("Trying to delete ingredient by id: [{}]", id);
 
         boolean result = false;
         if (ingredientRepository.existsById(id)) {
