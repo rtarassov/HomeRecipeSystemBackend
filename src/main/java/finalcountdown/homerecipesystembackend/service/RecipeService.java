@@ -20,8 +20,8 @@ public class RecipeService {
 
     public void addIngredientToRecipe(RecipeIngredientRequest recipeIngredientRequest) {
         try {
-            var ingredientObject = ingredientRepository.getById(recipeIngredientRequest.getRecipeId());
-            var recipeObject = recipeRepository.getById(recipeIngredientRequest.getIngredientId());
+            var ingredientObject = ingredientRepository.getById(recipeIngredientRequest.getIngredientId());
+            var recipeObject = recipeRepository.getById(recipeIngredientRequest.getRecipeId());
             recipeObject.getRecipeIngredients().add(ingredientObject);
             recipeRepository.save(recipeObject);
         } catch (Exception e) {
