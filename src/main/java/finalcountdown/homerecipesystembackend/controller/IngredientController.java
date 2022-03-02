@@ -1,7 +1,10 @@
 package finalcountdown.homerecipesystembackend.controller;
 
+import finalcountdown.homerecipesystembackend.dto.IngredientRequest;
+import finalcountdown.homerecipesystembackend.dto.RecipeIngredientRequest;
 import finalcountdown.homerecipesystembackend.model.Ingredient;
 import finalcountdown.homerecipesystembackend.service.IngredientService;
+import finalcountdown.homerecipesystembackend.service.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +20,20 @@ import java.util.List;
 @RequestMapping("/ingredient")
 public class IngredientController {
     private final IngredientService ingredientService;
+    private final RecipeService recipeService;
 
-    @Autowired
-    public IngredientController(IngredientService ingredientService) {
+    public IngredientController(IngredientService ingredientService, RecipeService recipeService) {
         this.ingredientService = ingredientService;
+        this.recipeService = recipeService;
     }
 
 
     @PostMapping("/create")
-    public ResponseEntity<?> createIngredient(@RequestBody Ingredient newIngredient) {
+    public ResponseEntity<?> createIngredient(@RequestBody IngredientRequest newIngredient) {
         log.info("New ingredient to save: [{}]", newIngredient);
-        ingredientService.saveIngredient(newIngredient);
+        var id = ingredientService.saveIngredient(newIngredient);
         return ResponseEntity.created(URI.create("/ingredient/create/%d"
-                        .formatted(newIngredient.getId())))
+                        .formatted(id)))
                 .body(newIngredient);
     }
 
@@ -43,7 +47,7 @@ public class IngredientController {
     public ResponseEntity<Ingredient> findIngredientById(@PathVariable("id") Long ingredientId) {
         log.info("trying to find ingredient entity by id: [{}]", ingredientId);
         var ingredient = ingredientService.readIngredientById(ingredientId);
-        return ingredient.map(ingredient1 -> ResponseEntity.ok(ingredient1))
+        return ingredient.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -66,5 +70,11 @@ public class IngredientController {
         return ResponseEntity.created(URI.create("/ingredient/create/%d"
                         .formatted(ingredient.getId())))
                 .body(ingredient);
+    }
+
+    @PostMapping("/add-ingredient-to-recipe")
+    public ResponseEntity<Void> addIngredientToRecipe(@RequestBody RecipeIngredientRequest recipeIngredientRequest) {
+        recipeService.addIngredientToRecipe(recipeIngredientRequest);
+        return ResponseEntity.ok().build();
     }
 }
