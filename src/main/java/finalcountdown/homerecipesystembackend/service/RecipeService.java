@@ -4,6 +4,7 @@ import finalcountdown.homerecipesystembackend.model.Recipe;
 import finalcountdown.homerecipesystembackend.repository.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,5 +36,17 @@ public class RecipeService {
         var maybeRecipe = recipeRepository.findById(id);
         log.info("found Ingredient: [{}]", maybeRecipe);
         return maybeRecipe;
+    }
+
+    @Transactional
+    public boolean deleteRecipeById(Long id) {
+        log.info("Trying to delete recipe entity by id: [{}]", id);
+
+        boolean result = false;
+        if (recipeRepository.existsById(id)) {
+            recipeRepository.deleteById(id);
+            result = true;
+        }
+        return result;
     }
 }

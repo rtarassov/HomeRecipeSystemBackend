@@ -41,4 +41,14 @@ public class RecipeController {
         return recipe.map(recipe1 -> ResponseEntity.ok(recipe1))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("/delete-by-id/{id}")
+    public ResponseEntity<Void> deleteRecipeById(@PathVariable("id") Long id) {
+        log.info("trying to delete recipe by id: [{}]", id);
+        boolean deleted = recipeService.deleteRecipeById(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
