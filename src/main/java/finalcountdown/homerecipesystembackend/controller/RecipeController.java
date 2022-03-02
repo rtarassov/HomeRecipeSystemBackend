@@ -33,4 +33,12 @@ public class RecipeController {
         log.info("findAllRecipes() was called from controller");
         return recipeService.readAllRecipes();
     }
+
+    @GetMapping("/find-by-id/{id}")
+    public ResponseEntity<Recipe> findRecipeById(@PathVariable("id") Long recipeId) {
+        log.info("trying to find ingredient entity by id: [{}]", recipeId);
+        var recipe = recipeService.readRecipeById(recipeId);
+        return recipe.map(recipe1 -> ResponseEntity.ok(recipe1))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }

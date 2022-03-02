@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -24,9 +25,15 @@ public class RecipeService {
 
     public List<Recipe> readAllRecipes() {
         log.info("Trying to read all recipes in database");
-
         var result = recipeRepository.findAll();
         log.info("Recipes saved from DB: " + result);
         return result;
+    }
+
+    public Optional<Recipe> readRecipeById(Long id) {
+        log.info("trying to read recipe by id: [{}]", id);
+        var maybeRecipe = recipeRepository.findById(id);
+        log.info("found Ingredient: [{}]", maybeRecipe);
+        return maybeRecipe;
     }
 }
