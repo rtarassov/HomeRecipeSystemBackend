@@ -4,12 +4,10 @@ import finalcountdown.homerecipesystembackend.model.Recipe;
 import finalcountdown.homerecipesystembackend.service.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -28,5 +26,11 @@ public class RecipeController {
         return ResponseEntity.created(URI.create("/recipe/create/%d"
                 .formatted(newRecipe.getId())))
                 .body(newRecipe);
+    }
+
+    @GetMapping("/read-all")
+    public List<Recipe> findAllRecipes() {
+        log.info("findAllRecipes() was called from controller");
+        return recipeService.readAllRecipes();
     }
 }
