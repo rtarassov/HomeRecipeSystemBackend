@@ -61,9 +61,13 @@ public class IngredientController {
     @PutMapping("/update/{id}")
     public ResponseEntity<Ingredient> updateIngredientById(@PathVariable("id") Long id, @RequestBody Ingredient ingredient) {
         log.info("updateIngredientById() called from controller");
-        ingredientService.updateIngredient(id, ingredient);
-        return ResponseEntity.created(URI.create("/ingredient/create/%d"
-                        .formatted(ingredient.getId())))
-                .body(ingredient);
+        boolean updated = ingredientService.updateIngredient(id, ingredient);
+        if (updated) {
+            return ResponseEntity.created(URI.create("/ingredient/create/%d"
+                            .formatted(ingredient.getId())))
+                    .body(ingredient);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 }
