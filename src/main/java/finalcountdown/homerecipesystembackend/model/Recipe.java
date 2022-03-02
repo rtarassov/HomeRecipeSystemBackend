@@ -9,13 +9,13 @@ import java.util.List;
 @Data
 public class Recipe {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
     @ManyToMany
-    private List<RecipeIngredient> recipeIngredients;
+    private List<Ingredient> recipeIngredients;
 
     @OneToOne(cascade = CascadeType.ALL)
     private PrepMethod prepMethod;
