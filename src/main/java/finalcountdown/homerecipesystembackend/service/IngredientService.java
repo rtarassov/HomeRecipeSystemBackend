@@ -1,5 +1,6 @@
 package finalcountdown.homerecipesystembackend.service;
 
+import finalcountdown.homerecipesystembackend.dto.IngredientRequest;
 import finalcountdown.homerecipesystembackend.model.Ingredient;
 import finalcountdown.homerecipesystembackend.model.IngredientType;
 import finalcountdown.homerecipesystembackend.repository.IngredientRepository;
