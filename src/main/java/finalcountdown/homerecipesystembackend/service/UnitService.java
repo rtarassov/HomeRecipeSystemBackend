@@ -26,7 +26,7 @@ public class UnitService {
 
 
     @Transactional
-    public boolean updateStep(Long id, Unit entity) {
+    public boolean updateUnit(Long id, Unit entity) {
         Optional<Unit> unit = unitRepository.findById(id);
         if (unit.isPresent()) {
             entity.setId(unit.get().getId());
@@ -37,7 +37,7 @@ public class UnitService {
     }
 
     @Transactional
-    public boolean deleteStepById(Long id) {
+    public boolean deleteUnitById(Long id) {
         boolean result = false;
         if (unitRepository.existsById(id)) {
             unitRepository.deleteById(id);
