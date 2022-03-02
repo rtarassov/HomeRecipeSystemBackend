@@ -13,11 +13,16 @@ import javax.persistence.*;
 public class Ingredient {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
     @Enumerated(EnumType.STRING)
     private IngredientType ingredientType;
+
+    private Float quantity;
+
+    @OneToOne(targetEntity = Unit.class)
+    private Unit unit;
 }
