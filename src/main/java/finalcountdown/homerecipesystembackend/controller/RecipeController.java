@@ -51,4 +51,17 @@ public class RecipeController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Recipe> updateRecipeById(@PathVariable("id") Long id, @RequestBody Recipe recipe) {
+        log.info("updateRecipeById() called from controller");
+        boolean updated = recipeService.updateRecipe(id, recipe);
+        if (updated) {
+            return ResponseEntity
+                    .created(URI.create("/recipe/create/%d"
+                    .formatted(recipe.getId())))
+                    .body(recipe);
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

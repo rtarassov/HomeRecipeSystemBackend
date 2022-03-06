@@ -27,8 +27,8 @@ public class RecipeService {
 
     public void addIngredientToRecipe(RecipeIngredientRequest recipeIngredientRequest) {
         try {
-            var ingredientObject = ingredientRepository.getById(recipeIngredientRequest.getRecipeId());
-            var recipeObject = recipeRepository.getById(recipeIngredientRequest.getIngredientId());
+            var ingredientObject = ingredientRepository.getById(recipeIngredientRequest.getIngredientId());
+            var recipeObject = recipeRepository.getById(recipeIngredientRequest.getRecipeId());
             recipeObject.getRecipeIngredients().add(ingredientObject);
             recipeRepository.save(recipeObject);
         } catch (Exception e) {
@@ -37,7 +37,11 @@ public class RecipeService {
     }
 
     public void saveRecipe(Recipe recipeEntity) {
-        log.info("recipe entity for saving", recipeEntity);
+        log.info("recipe entity for saving [{}]", recipeEntity);
+
+//        try {
+//            var
+//        }
         recipeRepository.save(recipeEntity);
     }
 
@@ -65,5 +69,17 @@ public class RecipeService {
             result = true;
         }
         return result;
+    }
+
+    @Transactional
+    public boolean updateRecipe(Long id, Recipe entity) {
+        log.info("updating recipe: [{}]", entity);
+        Optional<Recipe> recipe = recipeRepository.findById(id);
+        if (recipe.isPresent()) {
+            entity.setId(recipe.get().getId());
+            recipeRepository.save(entity);
+            return true;
+        }
+        return false;
     }
 }
