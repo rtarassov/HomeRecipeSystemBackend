@@ -1,8 +1,10 @@
 package finalcountdown.homerecipesystembackend.service;
 
 import finalcountdown.homerecipesystembackend.dto.RecipeIngredientRequest;
+import finalcountdown.homerecipesystembackend.dto.RecipeRequest;
 import finalcountdown.homerecipesystembackend.model.Recipe;
 import finalcountdown.homerecipesystembackend.repository.IngredientRepository;
+import finalcountdown.homerecipesystembackend.repository.PrepMethodRepository;
 import finalcountdown.homerecipesystembackend.repository.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,10 +21,12 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final IngredientRepository ingredientRepository;
+    private final PrepMethodRepository prepMethodRepository;
 
-    public RecipeService(RecipeRepository recipeRepository, IngredientRepository ingredientRepository) {
+    public RecipeService(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, PrepMethodRepository prepMethodRepository) {
         this.recipeRepository = recipeRepository;
         this.ingredientRepository = ingredientRepository;
+        this.prepMethodRepository = prepMethodRepository;
     }
 
     public void addIngredientToRecipe(RecipeIngredientRequest recipeIngredientRequest) {
@@ -36,13 +40,21 @@ public class RecipeService {
         }
     }
 
-    public void saveRecipe(Recipe recipeEntity) {
+    @Transactional
+    public Long saveRecipe(RecipeRequest recipeEntity) {
         log.info("recipe entity for saving [{}]", recipeEntity);
 
-//        try {
-//            var
-//        }
-        recipeRepository.save(recipeEntity);
+        try {
+            var prepMethodObject = prepMethodRepository.getById(recipeEntity.getPrepMethodId());
+            var recipeObject = new Recipe();
+            recipeObject.setName(recipeEntity.getName());
+            recipeObject.setNote(recipeEntity.getNote());
+            recipeObject.setPrepMethod(prepMethodObject);
+            recipeRepository.save(recipeObject);
+            return recipeObject.getId();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 
     public List<Recipe> readAllRecipes() {

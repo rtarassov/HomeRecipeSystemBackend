@@ -1,5 +1,6 @@
 package finalcountdown.homerecipesystembackend.controller;
 
+import finalcountdown.homerecipesystembackend.dto.RecipeRequest;
 import finalcountdown.homerecipesystembackend.model.Recipe;
 import finalcountdown.homerecipesystembackend.service.RecipeService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,11 +21,11 @@ public class RecipeController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createRecipe(@RequestBody Recipe newRecipe) {
-        log.info("New recipe to save", newRecipe);
-        recipeService.saveRecipe(newRecipe);
+    public ResponseEntity<?> createRecipe(@RequestBody RecipeRequest newRecipe) {
+        log.info("New recipe to save [{}]", newRecipe);
+        var id = recipeService.saveRecipe(newRecipe);
         return ResponseEntity.created(URI.create("/recipe/create/%d"
-                .formatted(newRecipe.getId())))
+                .formatted(id)))
                 .body(newRecipe);
     }
 
