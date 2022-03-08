@@ -14,4 +14,6 @@ public class PrepMethod {
 
     @ManyToMany
     private List<Step> steps;
+
+    private String name;
 }
