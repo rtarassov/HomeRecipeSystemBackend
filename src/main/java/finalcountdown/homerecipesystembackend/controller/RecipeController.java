@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
+@CrossOrigin(origins = "http://localhost:4200/") //TODO: Remove this line when I don't host on my own computer anymore.
 @RequestMapping("/recipe")
 public class RecipeController {
     private final RecipeService recipeService;
