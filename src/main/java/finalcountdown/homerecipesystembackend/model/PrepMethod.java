@@ -16,4 +16,5 @@ public class PrepMethod {
     private List<Step> steps;
 
     private String name;
+    private Integer difficulty;
 }
