@@ -84,14 +84,23 @@ public class RecipeService {
     }
 
     @Transactional
-    public boolean updateRecipe(Long id, Recipe entity) {
+    public Long updateRecipe(Long id, RecipeRequest entity) {
         log.info("updating recipe: [{}]", entity);
-        Optional<Recipe> recipe = recipeRepository.findById(id);
-        if (recipe.isPresent()) {
-            entity.setId(recipe.get().getId());
-            recipeRepository.save(entity);
-            return true;
+
+        try {
+            var recipeObject = new Recipe();
+            var prepMethodObject = prepMethodRepository.getById(entity.getPrepMethodId());
+
+            recipeObject.setId(id);
+            recipeObject.setName(entity.getName());
+            recipeObject.setNote(entity.getNote());
+            recipeObject.setPrepMethod(prepMethodObject);
+
+            recipeRepository.save(recipeObject);
+
+            return recipeObject.getId();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        return false;
     }
 }

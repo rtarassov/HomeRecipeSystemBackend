@@ -39,7 +39,7 @@ public class RecipeController {
     public ResponseEntity<Recipe> findRecipeById(@PathVariable("id") Long recipeId) {
         log.info("trying to find ingredient entity by id: [{}]", recipeId);
         var recipe = recipeService.readRecipeById(recipeId);
-        return recipe.map(recipe1 -> ResponseEntity.ok(recipe1))
+        return recipe.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -54,15 +54,14 @@ public class RecipeController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Recipe> updateRecipeById(@PathVariable("id") Long id, @RequestBody Recipe recipe) {
+    public ResponseEntity<?> updateRecipeById(@PathVariable("id") Long id,
+                                              @RequestBody RecipeRequest recipe) {
         log.info("updateRecipeById() called from controller");
-        boolean updated = recipeService.updateRecipe(id, recipe);
-        if (updated) {
+        var recipeId = recipeService.updateRecipe(id, recipe);
+
             return ResponseEntity
-                    .created(URI.create("/recipe/create/%d"
-                    .formatted(recipe.getId())))
+                    .created(URI.create("/recipe/update/%d"
+                    .formatted(recipeId)))
                     .body(recipe);
-        }
-        return ResponseEntity.notFound().build();
     }
 }
