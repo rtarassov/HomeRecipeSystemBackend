@@ -33,12 +33,14 @@ public class IngredientService {
         try {
             var unitObject = unitRepository.getById(entity.getUnitId());
             var ingredientObject = new Ingredient();
+
             ingredientObject.setName(entity.getName());
             ingredientObject.setQuantity(entity.getQuantity());
             ingredientObject.setIngredientType(IngredientType.valueOf(entity.getIngredientType()));
             ingredientObject.setUnit(unitObject);
 
             ingredientRepository.save(ingredientObject);
+
             return ingredientObject.getId();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -46,15 +48,25 @@ public class IngredientService {
     }
 
     @Transactional
-    public boolean updateIngredient(Long id, Ingredient entity) {
+    public Long updateIngredient(Long id, IngredientRequest entity) {
         log.info("updating ingredient: [{}]", entity);
-        Optional<Ingredient> ingredient = ingredientRepository.findById(id);
-        if (ingredient.isPresent()) {
-            entity.setId(ingredient.get().getId());
-            ingredientRepository.save(entity);
-            return true;
+
+        try {
+            var ingredientObject = new Ingredient();
+            var unitObject = unitRepository.getById(entity.getUnitId());
+
+            ingredientObject.setId(id);
+            ingredientObject.setName(entity.getName());
+            ingredientObject.setIngredientType(IngredientType.valueOf(entity.getIngredientType()));
+            ingredientObject.setQuantity(entity.getQuantity());
+            ingredientObject.setUnit(unitObject);
+
+            ingredientRepository.save(ingredientObject);
+
+            return ingredientObject.getId();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        return false;
     }
 
     public List<Ingredient> readAllIngredients() {

@@ -6,12 +6,9 @@ import finalcountdown.homerecipesystembackend.model.Ingredient;
 import finalcountdown.homerecipesystembackend.service.IngredientService;
 import finalcountdown.homerecipesystembackend.service.RecipeService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.net.URI;
 import java.util.List;
 
@@ -63,17 +60,14 @@ public class IngredientController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Ingredient> updateIngredientById(@PathVariable("id") Long id,
-                                                           @RequestBody Ingredient ingredient) {
+    public ResponseEntity<?> updateIngredientById(@PathVariable("id") Long id,
+                                                  @RequestBody IngredientRequest ingredient) {
         log.info("updateIngredientById() called from controller");
-        boolean updated = ingredientService.updateIngredient(id, ingredient);
-        if (updated) {
-            return ResponseEntity.created(URI.create("/ingredient/create/%d"
-                            .formatted(ingredient.getId())))
-                    .body(ingredient);
-        }
+        var ingredientId = ingredientService.updateIngredient(id, ingredient);
 
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.created(URI.create("/ingredient/update/%d"
+                .formatted(ingredientId)))
+                .body(ingredient);
     }
 
     @PostMapping("/add-ingredient-to-recipe")
